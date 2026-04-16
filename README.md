@@ -1,6 +1,6 @@
-# HDR Screenshot Tool для Windows
+# HDR Screenshot Tool for Windows
 
-Інструмент для захоплення HDR-скріншотів на Windows 10/11 з підтримкою тонмаппінгу та збереженням через системний трей.
+A system tray tool for capturing HDR screenshots on Windows 10/11 with tone mapping and instant clipboard copy.
 
 ![Windows 11](https://img.shields.io/badge/Windows-10%2F11-blue)
 ![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-blue)
@@ -8,32 +8,32 @@
 
 ---
 
-![Порівняння: Ножиці vs HDR Screenshot Tool — Death Stranding 2](docs/comparison.png)
+![Comparison: Snipping Tool vs HDR Screenshot Tool — Death Stranding 2](docs/comparison.png)
 
-## Навіщо це потрібно
+## Why
 
-Стандартні інструменти Windows (Ножиці, Win+PrintScreen) захоплюють скріни в SDR — HDR-деталі та яскраві бліки обрізаються або виглядають пересвіченими. Цей інструмент захоплює кадр у форматі **FP16 scRGB** безпосередньо через DXGI Desktop Duplication API, а потім застосовує тонмаппінг — так само як це робить OBS — і зберігає коректно відтонмаппований SDR PNG.
+Standard Windows capture tools (Snipping Tool, Win+PrintScreen) grab frames in SDR — HDR highlights are clipped or blown out. This tool captures the raw frame in **FP16 scRGB** directly via the DXGI Desktop Duplication API, then applies tone mapping (the same method used by OBS) and saves a correctly tone-mapped SDR PNG.
 
-## Функціонал
+## Features
 
-- **Захоплення всього екрану** — хоткей (за замовчуванням `Ctrl+Shift+H`)
-- **Захоплення регіону** — хоткей `Ctrl+Shift+R`, потягни мишею для вибору зони
-- **HDR → SDR тонмаппінг** з налаштовуваною яскравістю (SDR white point в нітах)
-- **Три алгоритми тонмаппінгу:** Windows/OBS-style (рекомендований), ACES filmic [тест], Reinhard [тест]
-- **Автоматичне копіювання** в буфер обміну
-- **Toast-сповіщення** з мініатюрою скріншоту після кожного захоплення
-- **System tray** — програма живе у треї, не займає місця на таскбарі
-- **Підтримка кількох моніторів** — захоплюється монітор під курсором
-- **Fallback до SDR** — якщо HDR не підтримується, захоплення через dxcam BGRA
-- **Автозапуск з Windows** — опціонально, вмикається в налаштуваннях
+- **Full-screen capture** — configurable hotkey (default `Ctrl+Shift+H`)
+- **Region capture** — hotkey `Ctrl+Shift+R`, drag to select a crop area with a live preview overlay
+- **HDR → SDR tone mapping** with adjustable SDR white point (in nits)
+- **Three tone mapping algorithms:** Windows/OBS-style (recommended), ACES filmic [test], Reinhard [test]
+- **Auto-copy to clipboard** after every capture
+- **Toast notification** with a screenshot thumbnail
+- **System tray** — lives quietly in the notification area
+- **Multi-monitor support** — captures the monitor under the cursor, with correct Win32↔DXGI index mapping
+- **SDR fallback** — if HDR is not active, falls back to dxcam BGRA capture
+- **Start with Windows** — optional autostart, configurable in settings
 
-## Вимоги
+## Requirements
 
-- Windows 10 версія 1703+ (теоретично) або Windows 11 (протестовано)
-- HDR-сумісний монітор та GPU з увімкненим HDR у налаштуваннях Windows
+- Windows 10 version 1703+ (theoretical) or Windows 11 (tested)
+- HDR-capable monitor and GPU with HDR enabled in Windows display settings
 - Python 3.11+
 
-## Встановлення
+## Installation
 
 ```bash
 git clone https://github.com/MagestiUA/HDR_Screenshot_tool_for_windows.git
@@ -44,94 +44,104 @@ pip install -r requirements.txt
 python main.py
 ```
 
-## Налаштування
+After launch, the icon appears in the system tray. Use the hotkeys or right-click the tray icon to open Settings.
 
-Правий клік на іконці в треї → **Settings…**
+## Settings
 
-| Параметр | Опис |
-|----------|------|
-| Save folder | Папка для збереження скріншотів |
-| Tone mapping | Алгоритм тонмаппінгу |
-| SDR brightness (nits) | Яскравість SDR білого (160–480). Вище = темніший результат. Рекомендовано: 200–250 |
-| Hotkey — Full screen | Хоткей для захоплення всього екрану |
-| Hotkey — Region | Хоткей для вибору регіону |
-| Start with Windows | Автозапуск при старті системи |
+Right-click the tray icon → **Settings…**
 
-Конфігурація зберігається у `%LOCALAPPDATA%\HDRScreenshotTool\config.json` — програма коректно працює з будь-якої директорії, включно з `Program Files`, без прав адміністратора.
+| Setting | Description |
+|---------|-------------|
+| Save folder | Where screenshots are saved |
+| Tone mapping | Tone mapping algorithm |
+| SDR brightness (nits) | SDR white reference level (160–480 nits). Higher = darker output. Recommended: 200–250 |
+| Hotkey — Full screen | Hotkey for full-screen capture |
+| Hotkey — Region | Hotkey for region capture |
+| Start with Windows | Launch automatically on system startup |
 
-## Пакування в exe
+Settings are stored in `%LOCALAPPDATA%\HDRScreenshotTool\config.json` — the app works correctly from any location, including `Program Files`, without administrator privileges.
+
+## Build as exe
 
 ```bash
 pyinstaller --onefile --windowed --icon app.ico --add-data "app.ico;." main.py
 ```
 
-Готовий файл буде у `dist\main.exe`.
+The executable will be in `dist\main.exe`.
 
-## Можливі проблеми при запуску exe~~~~
+## Troubleshooting
 
 ### Windows Smart App Control / SmartScreen
 
-На Windows 11 з увімкненим **Smart App Control** exe може бути заблокований із повідомленням _«Інтелектуальне керування програмами заблокувало потенційно небезпечну програму»_. Це стандартна поведінка для непідписаних виконуваних файлів від незнайомих видавців.
+On Windows 11 with **Smart App Control** enabled, the exe may be blocked with a message like _"Smart App Control blocked a potentially unsafe app"_. This is expected behaviour for unsigned executables from unknown publishers.
 
-**Варіант 1 — вимкнути Smart App Control** (одноразово, не впливає на загальну безпеку системи):
-> Параметри → Конфіденційність і безпека → Безпека Windows → Керування додатками і браузером → Smart App Control → **Вимкнути**
+**Option 1 — disable Smart App Control** (one-time, does not affect overall system security):
+> Settings → Privacy & Security → Windows Security → App & Browser Control → Smart App Control → **Off**
 
-**Варіант 2 — запустити з вихідного коду** (не потребує жодних дозволів):
+**Option 2 — run from source** (no permissions required):
 ```bash
 python main.py
 ```
 
-**Варіант 3 — класичний SmartScreen** (якщо з'являється кнопка «Детальніше»):
-> Натисніть «Детальніше» → «Все одно запустити»
+**Option 3 — classic SmartScreen** (if a "More info" button appears):
+> Click "More info" → "Run anyway"
 
-## Структура проекту
+## Project structure
 
 ```
-main.py              # точка входу, tray, хоткеї, workflow скріншота
-capture.py           # пул камер, Win32↔DXGI маппінг моніторів
-dxgi_capture/        # власна реалізація FP16 захоплення через DXGI
-  capture.py         # FP16Capture клас, raw vtable D3D11 виклики
-tonemapping.py       # алгоритми тонмаппінгу, збереження PNG
-settings_window.py   # UI налаштувань (customtkinter)
-overlay.py           # fullscreen оверлей для вибору регіону
-clipboard_win.py     # копіювання у буфер обміну Windows
-notification.py      # toast-сповіщення через PowerShell + WinRT
-hdr_detect.py        # визначення HDR-стану монітора
-config.py            # завантаження/збереження config.json
+main.py              # entry point, tray icon, hotkeys, screenshot workflow
+capture.py           # camera pool, Win32↔DXGI monitor index mapping
+dxgi_capture/        # custom FP16 capture via DXGI Desktop Duplication
+  capture.py         # FP16Capture class, raw vtable D3D11 calls
+tonemapping.py       # tone mapping operators, PNG saving
+settings_window.py   # settings UI (customtkinter)
+overlay.py           # fullscreen region selection overlay (tkinter)
+clipboard_win.py     # copy image to Windows clipboard
+notification.py      # toast notifications via PowerShell + WinRT
+hdr_detect.py        # per-monitor HDR state detection
+config.py            # config.json load/save
 ```
 
-## Як це працює
+## How it works
 
-1. При натисканні хоткею захоплюється поточний кадр монітора під курсором
-2. Якщо монітор в режимі HDR — використовується `FP16Capture` (DXGI R16G16B16A16_FLOAT)
-3. Отриманий float32 BGRA масив (scRGB лінійний, значення >1.0 = HDR-блики) передається в `tonemapping.to_sdr()`
-4. Результат зберігається як PNG, копіюється в буфер обміну, з'являється toast-сповіщення
+1. When a hotkey is pressed, the monitor under the cursor is captured
+2. If the monitor is in HDR mode — `FP16Capture` is used (DXGI `R16G16B16A16_FLOAT` format)
+3. The resulting float32 BGRA array (scRGB linear; values >1.0 are HDR highlights) is passed to `tonemapping.to_sdr()`
+4. The tone-mapped image is saved as PNG, copied to the clipboard, and a toast notification appears with a thumbnail
 
-## Відомі обмеження
+### Tone mapping — Windows/OBS mode
 
-- Протестовано на Windows 11; Windows 10 теоретично підтримується
-- Захищений контент (DRM) не захоплюється — обмеження DXGI
-- Одночасно може працювати тільки один екземпляр програми; повторний запуск показує відповідне повідомлення
+Divides each pixel by `sdr_white_nits / 80`, clips to [0, 1], then applies sRGB gamma encoding. This maps SDR UI content to exactly [0, 1] while clipping HDR highlights to white — identical to OBS screen recording output.
 
-## Підтримати проект
+### FP16 capture internals
 
-Якщо інструмент виявився корисним, можна підтримати розробника банківським переказом (EUR):
+`FP16Capture` uses `IDXGIOutput5.DuplicateOutput1` to acquire frames in `DXGI_FORMAT_R16G16B16A16_FLOAT`. It calls `CopyResource`, `Map`, and `Unmap` on the D3D11 device context via **raw vtable calls** (bypassing comtypes dispatch, which corrupts D3D11 state in Python 3.14+).
 
-**SEPA** (в межах Європи)
+## Known limitations
+
+- Tested on Windows 11; Windows 10 is theoretically supported
+- DRM-protected content cannot be captured — DXGI limitation
+- Only one instance can run at a time; launching a second copy shows a notification and exits
+
+## Support the project
+
+If you find this tool useful, you can support the developer via bank transfer (EUR only):
+
+**SEPA** (within Europe)
 | | |
 |---|---|
 | IBAN | `GB63CLJU00997185802758` |
 | BIC | `CLJUGB21` |
-| Отримувач | `BILOIVAN MYKOLA` |
+| Receiver | `BILOIVAN MYKOLA` |
 
-**SWIFT** (з усього світу, тільки EUR)
+**SWIFT** (worldwide, EUR only)
 | | |
 |---|---|
 | IBAN | `UA113220010000026007310105358` |
 | SWIFT/BIC | `UNJSUAUKXXX` |
-| Отримувач | `PE BILOIVAN MYKOLA` |
-| Адреса | `02088, Ukraine, Kyiv, st. Levadna, build 74` |
+| Receiver | `PE BILOIVAN MYKOLA` |
+| Address | `02088, Ukraine, Kyiv, st. Levadna, build 74` |
 
-## Ліцензія
+## License
 
 MIT

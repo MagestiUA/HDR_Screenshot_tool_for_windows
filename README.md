@@ -41,6 +41,35 @@ Unlike other screenshot tools, it works correctly in all contexts — games, bro
 
 Alternatively, run from source — see [Installation](#installation).
 
+## Troubleshooting
+
+### Windows Smart App Control / SmartScreen
+
+On Windows 11 with **Smart App Control** enabled, the exe may be blocked with a message like _"Smart App Control blocked a potentially unsafe app"_. This is expected behaviour for unsigned executables from unknown publishers.
+
+**Option 1 — disable Smart App Control** (one-time, does not affect overall system security):
+> Settings → Privacy & Security → Windows Security → App & Browser Control → Smart App Control → **Off**
+
+**Option 2 — run from source** (no permissions required):
+```bash
+python main.py
+```
+
+**Option 3 — classic SmartScreen** (if a "More info" button appears):
+> Click "More info" → "Run anyway"
+
+### HDR capture returns a black or corrupted image
+
+Make sure HDR is actually enabled in Windows display settings for your monitor. The tool detects HDR state per-monitor — if HDR is off, it falls back to standard SDR capture automatically.
+
+### Screenshot looks identical to Snipping Tool output
+
+Your SDR brightness (nits) setting may be too high. Try lowering it to 200–250 nits in Settings. Higher values compress the HDR range more aggressively, making the result look similar to SDR capture.
+
+### Hotkey not working
+
+Another application may have registered the same hotkey globally. Change the hotkey in Settings → Hotkey — Full screen or Hotkey — Region.
+
 ## Requirements
 
 - Windows 10 version 1703+ (theoretical) or Windows 11 (tested)
@@ -82,23 +111,6 @@ pyinstaller --onefile --windowed --icon app.ico --add-data "app.ico;." main.py
 ```
 
 The executable will be in `dist\main.exe`.
-
-## Troubleshooting
-
-### Windows Smart App Control / SmartScreen
-
-On Windows 11 with **Smart App Control** enabled, the exe may be blocked with a message like _"Smart App Control blocked a potentially unsafe app"_. This is expected behaviour for unsigned executables from unknown publishers.
-
-**Option 1 — disable Smart App Control** (one-time, does not affect overall system security):
-> Settings → Privacy & Security → Windows Security → App & Browser Control → Smart App Control → **Off**
-
-**Option 2 — run from source** (no permissions required):
-```bash
-python main.py
-```
-
-**Option 3 — classic SmartScreen** (if a "More info" button appears):
-> Click "More info" → "Run anyway"
 
 ## Project structure
 

@@ -1,0 +1,11 @@
+# HDR Screenshot Tool — Python dependencies
+# Install with:  pip install -r requirements.txt
+
+dxcam           # DXGI Desktop Duplication API — HDR FP16 capture
+numpy           # tone-mapping math
+Pillow          # image processing, SDR PNG save, tray icon loading
+pynput          # global hotkeys
+pystray         # system tray icon
+customtkinter   # settings UI
+# imageio        # no longer needed — 16-bit PNG is now written via stdlib
+pyinstaller     # packaging — run:  pyinstaller --onefile --windowed --icon app.ico main.py

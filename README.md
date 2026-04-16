@@ -14,6 +14,8 @@ A system tray tool for capturing HDR screenshots on Windows 10/11 with tone mapp
 
 Standard Windows capture tools (Snipping Tool, Win+PrintScreen) grab frames in SDR — HDR highlights are clipped or blown out. This tool captures the raw frame in **FP16 scRGB** directly via the DXGI Desktop Duplication API, then applies tone mapping (the same method used by OBS) and saves a correctly tone-mapped SDR PNG.
 
+Unlike other screenshot tools, it works correctly in all contexts — games, browsers, desktop apps — because it captures at the compositor level via DXGI, not through the GDI/BitBlt pipeline.
+
 ## Features
 
 - **Full-screen capture** — configurable hotkey (default `Ctrl+Shift+H`)
@@ -26,6 +28,18 @@ Standard Windows capture tools (Snipping Tool, Win+PrintScreen) grab frames in S
 - **Multi-monitor support** — captures the monitor under the cursor, with correct Win32↔DXGI index mapping
 - **SDR fallback** — if HDR is not active, falls back to dxcam BGRA capture
 - **Start with Windows** — optional autostart, configurable in settings
+
+## Download
+
+> **No Python required** — just download and run.
+
+| File | Description |
+|------|-------------|
+| [hdr_screenshot_tool.exe](https://github.com/MagestiUA/HDR_Screenshot_tool_for_windows/releases/latest/download/hdr_screenshot_tool.exe) | Standalone executable (Windows 10/11) |
+
+> **Note:** Windows SmartScreen may warn about an unsigned executable. See [Troubleshooting](#troubleshooting) below.
+
+Alternatively, run from source — see [Installation](#installation).
 
 ## Requirements
 
@@ -122,6 +136,35 @@ Divides each pixel by `sdr_white_nits / 80`, clips to [0, 1], then applies sRGB 
 - Tested on Windows 11; Windows 10 is theoretically supported
 - DRM-protected content cannot be captured — DXGI limitation
 - Only one instance can run at a time; launching a second copy shows a notification and exits
+
+## Troubleshooting
+
+### Windows Smart App Control / SmartScreen
+
+On Windows 11 with **Smart App Control** enabled, the exe may be blocked with a message like _"Smart App Control blocked a potentially unsafe app"_. This is expected behaviour for unsigned executables from unknown publishers.
+
+**Option 1 — disable Smart App Control** (one-time, does not affect overall system security):
+> Settings → Privacy & Security → Windows Security → App & Browser Control → Smart App Control → **Off**
+
+**Option 2 — run from source** (no permissions required):
+```bash
+python main.py
+```
+
+**Option 3 — classic SmartScreen** (if a "More info" button appears):
+> Click "More info" → "Run anyway"
+
+### HDR capture returns a black or corrupted image
+
+Make sure HDR is actually enabled in Windows display settings for your monitor. The tool detects HDR state per-monitor — if HDR is off, it falls back to standard SDR capture automatically.
+
+### Screenshot looks identical to Snipping Tool output
+
+Your SDR brightness (nits) setting may be too high. Try lowering it to 200–250 nits in Settings. Higher values compress the HDR range more aggressively, making the result look similar to SDR capture.
+
+### Hotkey not working
+
+Another application may have registered the same hotkey globally. Change the hotkey in Settings → Hotkey — Full screen or Hotkey — Region.
 
 ## Support the project
 

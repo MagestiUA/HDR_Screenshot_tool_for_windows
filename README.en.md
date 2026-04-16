@@ -8,6 +8,8 @@ A system tray tool for capturing HDR screenshots on Windows 10/11 with tone mapp
 
 ---
 
+![Comparison: Snipping Tool vs HDR Screenshot Tool — Death Stranding 2](docs/comparison.png)
+
 ## Why
 
 Standard Windows capture tools (Snipping Tool, Win+PrintScreen) grab frames in SDR — HDR highlights are clipped or blown out. This tool captures the raw frame in **FP16 scRGB** directly via the DXGI Desktop Duplication API, then applies tone mapping (the same method used by OBS) and saves a correctly tone-mapped SDR PNG.

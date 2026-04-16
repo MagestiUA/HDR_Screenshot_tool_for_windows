@@ -34,7 +34,7 @@
 ## Встановлення
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/HDR_Screenshot_tool_for_windows.git
+git clone https://github.com/MagestiUA/HDR_Screenshot_tool_for_windows.git
 cd HDR_Screenshot_tool_for_windows
 python -m venv .venv
 .venv\Scripts\activate

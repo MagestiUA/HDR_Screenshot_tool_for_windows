@@ -168,6 +168,11 @@ If you find this tool useful, you can support the developer via bank transfer (E
 | Receiver | `PE BILOIVAN MYKOLA` |
 | Address | `02088, Ukraine, Kyiv, st. Levadna, build 74` |
 
+**USDT (TRC20)**
+| | |
+|---|---|
+| Address | `TCt7YNVpkLKeXHcvZZYSgXcamjW5aoRnhR` |
+
 ## License
 
 MIT

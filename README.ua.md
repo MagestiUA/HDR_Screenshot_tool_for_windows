@@ -158,6 +158,11 @@ config.py            # завантаження/збереження config.json
 | Отримувач | `PE BILOIVAN MYKOLA` |
 | Адреса | `02088, Ukraine, Kyiv, st. Levadna, build 74` |
 
+**USDT (TRC20)**
+| | |
+|---|---|
+| Адреса | `TCt7YNVpkLKeXHcvZZYSgXcamjW5aoRnhR` |
+
 ## Ліцензія
 
 MIT
